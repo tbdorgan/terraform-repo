@@ -3,7 +3,7 @@ variable "aws_region" {
 }
 
 variable "csv_bucket_name" {
-  default = "csv-upload-bucket"
+  default = "csv-upload-bucket-tdesai"
 }
 
 variable "dynamodb_table_name" {
