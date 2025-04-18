@@ -7,11 +7,10 @@ on:
   pull_request:
     branches:
       - main  # Trigger for pull requests targeting `main`
-      
+
 permissions:
   id-token: write # This is required for requesting the JWT
   
-
 jobs:
   terraform:
     runs-on: ubuntu-latest  # Use an Ubuntu runner for this job
