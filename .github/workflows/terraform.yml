@@ -17,8 +17,6 @@ jobs:
     runs-on: ubuntu-latest  # Use an Ubuntu runner for this job
 
     steps:
-     
-
       # Set up Terraform (using HashiCorp's setup-terraform action)
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
