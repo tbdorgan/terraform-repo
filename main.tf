@@ -42,6 +42,17 @@ resource "aws_secretsmanager_secret_version" "sns_secret_version" {
   secret_string = var.sns_endpoint
 }
 
+resource "aws_s3_bucket" "lambda_artifacts" {
+  bucket = var.lambda_bucket_name
+  force_destroy = true
+
+  tags = {
+    Name = "lambda-artifacts"
+  }
+}
+
+
+
 resource "aws_iam_role" "lambda_exec_role" {
   name = "lambda-csv-exec-role"
   assume_role_policy = jsonencode({
@@ -89,7 +100,9 @@ resource "aws_lambda_function" "csv_lambda" {
   runtime       = "java17"
   timeout       = 30
   memory_size   = 512
-  filename      = var.lambda_jar_path
+
+  s3_bucket     = var.lambda_bucket_name
+  s3_key        = var.lambda_s3_key
 
   environment {
     variables = {

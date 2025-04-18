@@ -26,7 +26,12 @@ variable "lambda_function_name" {
   default = "CsvFileHandlerLambda"
 }
 
-variable "lambda_jar_path" {
-  description = "Path to the JAR file"
-  default     = "../lambda/target/lambda-csv-processor-1.0-SNAPSHOT-shaded.jar"
+variable "lambda_bucket_name" {
+  default = "my-lambda-deployments-bucket-123456"
 }
+
+variable "lambda_s3_key" {
+  default = "lambda/csv-processor.zip"
+}
+
+
