@@ -42,16 +42,14 @@ resource "aws_secretsmanager_secret_version" "sns_secret_version" {
   secret_string = var.sns_endpoint
 }
 
-resource "aws_s3_bucket" "lambda_artifacts" {
+/* resource "aws_s3_bucket" "lambda_artifacts" {
   bucket = var.lambda_bucket_name
   force_destroy = true
 
   tags = {
     Name = "lambda-artifacts"
   }
-}
-
-
+} */
 
 resource "aws_iam_role" "lambda_exec_role" {
   name = "lambda-csv-exec-role"
