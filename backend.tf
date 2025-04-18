@@ -1,11 +1,10 @@
-
 terraform {
   backend "s3" {
-    bucket         = "my-terraform-state-bucket"
-    key            = "path/to/my/statefile.tfstate"
-    region         = "eu-west-2"
-    encrypt        = true
-    dynamodb_table = "terraform-locks"
-    acl            = "bucket-owner-full-control"
+    bucket         = "tdesai-terraform-state-bucket"  # Name of your S3 bucket
+    key            = "state/terraform.tfstate"        # Path where the state file will be stored within the bucket
+    region         = "eu-west-2"                      # AWS region where the bucket is located
+    encrypt        = true                             # Enable encryption for the state file
+    dynamodb_table = "terraform-locks"                # DynamoDB table for state locking (ensure this table exists)
+    acl            = "bucket-owner-full-control"     # Set ACL for the state file (optional)
   }
 }
