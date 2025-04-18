@@ -17,9 +17,7 @@ jobs:
     runs-on: ubuntu-latest  # Use an Ubuntu runner for this job
 
     steps:
-      # Checkout the repository to get the code
-      - name: Checkout code
-        uses: actions/checkout@v3
+     
 
       # Set up Terraform (using HashiCorp's setup-terraform action)
       - name: Set up Terraform
@@ -37,6 +35,10 @@ jobs:
 
       - name: Debug AWS credentials
         run: aws sts get-caller-identity
+
+         # Checkout the repository to get the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
     
       # Initialize Terraform (downloads necessary plugins and sets up Terraform)
