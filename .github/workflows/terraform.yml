@@ -3,52 +3,46 @@ name: Terraform Workflow
 on:
   push:
     branches:
-      - main  # Trigger the workflow on pushes to the `main` branch
+      - main  # Trigger when there is a push to `main`
   pull_request:
     branches:
-      - main  # Also trigger for pull requests to the `main` branch
+      - main  # Trigger for pull requests targeting `main`
 
 jobs:
   terraform:
-    name: Terraform Setup and Apply
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use an Ubuntu runner for this job
 
     steps:
+      # Checkout the repository to get the code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Set up Terraform (using HashiCorp's setup-terraform action)
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.4.6  # Set the Terraform version
+          terraform_version: 1.4.6  # Specify the Terraform version (adjust as needed)
 
-      - name: Cache Terraform Providers
-        uses: actions/cache@v3
-        with:
-          path: ~/.terraform.d/plugin-cache
-          key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
-          restore-keys: |
-            ${{ runner.os }}-terraform-
-
+      # Set up AWS IAM credentials (use OIDC for IAM role assumption)
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Specify the AWS region you're deploying to
+          role-to-assume: arn:aws:iam::657454854557:role/GitHubActionsRole  # Replace with your IAM role ARN
+          aws-region: eu-west-2  # Set the AWS region where you want to deploy the infrastructure
 
+      # Initialize Terraform (downloads necessary plugins and sets up Terraform)
       - name: Terraform Init
         run: terraform init
 
+      # Validate Terraform configuration
       - name: Terraform Validate
         run: terraform validate
 
+      # Plan Terraform changes
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
+      # Apply the Terraform plan to apply the changes to AWS
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-        env:
-          TF_VAR_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+        if: github.event_name == 'push'  # Ensure apply happens only on direct push to `main`
