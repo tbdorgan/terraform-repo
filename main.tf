@@ -100,7 +100,7 @@ resource "aws_iam_policy" "lambda_policy" {
           aws_secretsmanager_secret.sns_secret.arn,
           aws_lambda_function.csv_lambda.arn,
           "arn:aws:s3:::csv-upload-bucket-tdesai/*",
-          aws_cloudwatch_log_group.csv_lambda_log_group.arn,
+          #aws_cloudwatch_log_group.csv_lambda_log_group.arn,
           #"arn:aws:logs:*:*:log-group:/aws/lambda/CsvFileHandlerLambda*"
           "#arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${aws_lambda_function.csv_lambda.function_name}:*"
         ]
