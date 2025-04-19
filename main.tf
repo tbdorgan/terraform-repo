@@ -96,7 +96,7 @@ resource "aws_iam_policy" "lambda_policy" {
           aws_secretsmanager_secret.sns_secret.arn,
           aws_lambda_function.csv_lambda.arn,
           #aws_cloudwatch_log_group.csv_lambda_log_group.arn
-          "arn:aws:logs:*:*:log-group:/aws/lambda/*"
+          "arn:aws:logs:*:*:log-group:/aws/lambda/CsvFileHandlerLambda*"
         ]
       }
     ]
