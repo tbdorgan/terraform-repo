@@ -88,13 +88,12 @@ resource "aws_iam_policy" "lambda_policy" {
           aws_dynamodb_table.csv_table.arn,
           aws_sns_topic.csv_topic.arn,
           aws_secretsmanager_secret.sns_secret.arn,
-          aws_lambda_function.csv_lambda.arn  # Use the correct reference
+          aws_lambda_function.csv_lambda.arn  # Corrected to the appropriate reference
         ]
       }
     ]
   })
 }
-
 
 # Attach the IAM policy to the Lambda execution role
 resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
@@ -121,8 +120,6 @@ resource "aws_lambda_function" "csv_lambda" {
       DDB_TABLE_NAME  = aws_dynamodb_table.csv_table.name
     }
   }
-
-  depends_on = [aws_iam_role_policy_attachment.lambda_policy_attach]
 }
 
 # S3 Event Notification to trigger Lambda for .csv uploads
@@ -147,3 +144,4 @@ resource "aws_lambda_permission" "allow_s3_invocation" {
   principal     = "s3.amazonaws.com"
   source_arn    = aws_s3_bucket.csv_bucket.arn
 }
+
