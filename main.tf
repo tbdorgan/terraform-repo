@@ -80,12 +80,15 @@ resource "aws_iam_policy" "lambda_policy" {
           "secretsmanager:GetSecretValue",
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
-          "logs:PutLogEvents"
+          "logs:PutLogEvents",
+          "lambda:GetFunction",
+          "lambda:UpdateFunctionCode"
         ],
         Resource = [
           aws_dynamodb_table.csv_table.arn,
           aws_sns_topic.csv_topic.arn,
-          aws_secretsmanager_secret.sns_secret.arn
+          aws_secretsmanager_secret.sns_secret.arn,
+          aws_lambda_function.CsvFileHandlerLambda.arn
         ]
       }
     ]
