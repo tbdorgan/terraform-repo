@@ -13,11 +13,13 @@ provider "aws" {
   region = var.aws_region
 }
 
+# S3 Bucket for CSV file uploads
 resource "aws_s3_bucket" "csv_bucket" {
   bucket = var.csv_bucket_name
   force_destroy = true
 }
 
+# DynamoDB table to store CSV file metadata
 resource "aws_dynamodb_table" "csv_table" {
   name         = var.dynamodb_table_name
   billing_mode = "PAY_PER_REQUEST"
@@ -29,44 +31,44 @@ resource "aws_dynamodb_table" "csv_table" {
   }
 }
 
+# SNS Topic for CSV upload notifications
 resource "aws_sns_topic" "csv_topic" {
   name = var.sns_topic_name
 }
 
+# Secrets Manager secret for SNS endpoint (Sensitive data)
 resource "aws_secretsmanager_secret" "sns_secret" {
   name = var.sns_secret_name
 }
 
+# Version of the SNS Secret with the actual endpoint (Sensitive data)
 resource "aws_secretsmanager_secret_version" "sns_secret_version" {
   secret_id     = aws_secretsmanager_secret.sns_secret.id
-  secret_string = var.sns_endpoint
+  secret_string = jsonencode({
+    email = "exampletoshack.desai@egmail.com"  # Sensitive data, fetched from Secrets Manager
+  })
 }
 
-/* resource "aws_s3_bucket" "lambda_artifacts" {
-  bucket = var.lambda_bucket_name
-  force_destroy = true
-
-  tags = {
-    Name = "lambda-artifacts"
-  }
-} */
-
+# IAM Role for Lambda function execution
 resource "aws_iam_role" "lambda_exec_role" {
   name = "lambda-csv-exec-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [{
-      Action    = "sts:AssumeRole",
-      Effect    = "Allow",
-      Principal = {
-        Service = "lambda.amazonaws.com"
+    Statement = [
+      {
+        Action    = "sts:AssumeRole",
+        Effect    = "Allow",
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
       }
-    }]
+    ]
   })
 }
 
+# IAM Policy for Lambda with specific permissions (Least Privilege)
 resource "aws_iam_policy" "lambda_policy" {
-  name = "lambda-csv-policy"
+  name   = "lambda-csv-policy"
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -80,17 +82,23 @@ resource "aws_iam_policy" "lambda_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        Resource = "*"
+        Resource = [
+          aws_dynamodb_table.csv_table.arn,
+          aws_sns_topic.csv_topic.arn,
+          aws_secretsmanager_secret.sns_secret.arn
+        ]
       }
     ]
   })
 }
 
+# Attach the IAM policy to the Lambda execution role
 resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
   role       = aws_iam_role.lambda_exec_role.name
   policy_arn = aws_iam_policy.lambda_policy.arn
 }
 
+# Lambda Function to handle CSV uploads
 resource "aws_lambda_function" "csv_lambda" {
   function_name = var.lambda_function_name
   role          = aws_iam_role.lambda_exec_role.arn
@@ -113,6 +121,7 @@ resource "aws_lambda_function" "csv_lambda" {
   depends_on = [aws_iam_role_policy_attachment.lambda_policy_attach]
 }
 
+# S3 Event Notification to trigger Lambda for .csv uploads
 resource "aws_s3_bucket_notification" "csv_upload_trigger" {
   bucket = aws_s3_bucket.csv_bucket.id
 
@@ -126,6 +135,7 @@ resource "aws_s3_bucket_notification" "csv_upload_trigger" {
   depends_on = [aws_lambda_permission.allow_s3_invocation]
 }
 
+# Allow S3 to invoke Lambda function
 resource "aws_lambda_permission" "allow_s3_invocation" {
   statement_id  = "AllowExecutionFromS3"
   action        = "lambda:InvokeFunction"
