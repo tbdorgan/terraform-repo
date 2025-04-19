@@ -71,6 +71,9 @@ resource "aws_cloudwatch_log_group" "csv_lambda_log_group" {
   retention_in_days = 30  # Optional, adjust retention as needed
 }
 
+# Fetch current AWS account identity
+data "aws_caller_identity" "current" {}
+
 
 # IAM Policy for Lambda with specific permissions (Least Privilege)
 resource "aws_iam_policy" "lambda_policy" {
