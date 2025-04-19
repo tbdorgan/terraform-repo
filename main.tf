@@ -23,10 +23,10 @@ resource "aws_s3_bucket" "csv_bucket" {
 resource "aws_dynamodb_table" "csv_table" {
   name         = var.dynamodb_table_name
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "employeeid"
+  hash_key     = "employeeId"
 
   attribute {
-    name = "employeeid"
+    name = "employeeId"
     type = "N"
   }
 }
