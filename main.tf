@@ -102,7 +102,7 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
 resource "aws_lambda_function" "csv_lambda" {
   function_name = var.lambda_function_name
   role          = aws_iam_role.lambda_exec_role.arn
-  handler       = "com.example.CsvHandler::handleRequest"
+  handler       = "com.example.CsvFileHandlerLambda::handleRequest"
   runtime       = "java17"
   timeout       = 30
   memory_size   = 512
