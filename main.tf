@@ -88,12 +88,13 @@ resource "aws_iam_policy" "lambda_policy" {
           aws_dynamodb_table.csv_table.arn,
           aws_sns_topic.csv_topic.arn,
           aws_secretsmanager_secret.sns_secret.arn,
-          aws_lambda_function.CsvFileHandlerLambda.arn
+          aws_lambda_function.csv_lambda.arn  # Use the correct reference
         ]
       }
     ]
   })
 }
+
 
 # Attach the IAM policy to the Lambda execution role
 resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
