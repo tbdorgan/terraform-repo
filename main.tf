@@ -91,7 +91,8 @@ resource "aws_iam_policy" "lambda_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents",
           "lambda:GetFunction",
-          "lambda:UpdateFunctionCode"
+          "lambda:UpdateFunctionCode",
+          "s3:GetObject"
         ],
         Resource = [
           aws_dynamodb_table.csv_table.arn,
