@@ -45,7 +45,7 @@ resource "aws_secretsmanager_secret" "sns_secret" {
 resource "aws_secretsmanager_secret_version" "sns_secret_version" {
   secret_id     = aws_secretsmanager_secret.sns_secret.id
   secret_string = jsonencode({
-    email = "exampletoshack.desai@egmail.com"  # Sensitive data, fetched from Secrets Manager
+    email = "toshack.desai@egmail.com"  # Sensitive data, fetched from Secrets Manager
   })
 }
 
