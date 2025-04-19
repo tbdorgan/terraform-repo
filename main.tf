@@ -66,6 +66,12 @@ resource "aws_iam_role" "lambda_exec_role" {
   })
 }
 
+resource "aws_cloudwatch_log_group" "csv_lambda_log_group" {
+  name = "/aws/lambda/${aws_lambda_function.csv_lambda.function_name}"
+  retention_in_days = 30  # Optional, adjust retention as needed
+}
+
+
 # IAM Policy for Lambda with specific permissions (Least Privilege)
 resource "aws_iam_policy" "lambda_policy" {
   name   = "lambda-csv-policy"
@@ -88,7 +94,8 @@ resource "aws_iam_policy" "lambda_policy" {
           aws_dynamodb_table.csv_table.arn,
           aws_sns_topic.csv_topic.arn,
           aws_secretsmanager_secret.sns_secret.arn,
-          aws_lambda_function.csv_lambda.arn  # Corrected to the appropriate reference
+          aws_lambda_function.csv_lambda.arn,
+          aws_cloudwatch_log_group.csv_lambda_log_group.arn
         ]
       }
     ]
