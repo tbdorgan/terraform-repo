@@ -33,6 +33,11 @@ variable "lambda_function_name" {
   default     = "CsvFileHandlerLambda"
 }
 
+variable "lambda_subscriber_function_name" {
+  description = "Name of the SNS Lambda function"
+  default     = "SnsSubscriberLambda"
+}
+
 variable "lambda_bucket_name" {
   description = "S3 bucket to store Lambda deployment artifacts"
   default     = "my-lambda-deployments-bucket-123456"
@@ -41,5 +46,15 @@ variable "lambda_bucket_name" {
 variable "lambda_s3_key" {
   description = "The S3 key for the Lambda zip deployment package"
   default     = "lambda/csv-processor.zip"
+}
+
+variable "lambda_subscriber_s3_key" {
+  description = "The S3 key for the Lambda zip deployment package"
+  default     = "lambda/sns-processor.zip"
+}
+
+variable "lambda_subscriber_function_name" {
+  description = "Name of the SNS Lambda function"
+  default     = "SnsSubscriberLambda"
 }
 
