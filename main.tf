@@ -27,7 +27,7 @@ resource "aws_dynamodb_table" "csv_table" {
 
   attribute {
     name = "employeeId"
-    type = "N"
+    type = "S"
   }
 }
 
