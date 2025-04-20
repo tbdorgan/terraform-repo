@@ -155,7 +155,7 @@ resource "aws_s3_bucket_notification" "csv_upload_trigger" {
 resource "aws_lambda_function" "sns_subscriber_lambda" {
   function_name = var.lambda_subscriber_function_name
   role          = aws_iam_role.lambda_exec_role.arn
-  handler       = "com.example.SnsSubscriberLambda::handleRequest"
+  handler       = "com.example.sns.SnsSubscriberLambda::handleRequest"
   runtime       = "java21"
   timeout       = 30
   memory_size   = 512
