@@ -30,6 +30,7 @@ resource "aws_dynamodb_table" "csv_table" {
     name = "employeeId"
     type = "S"
   }
+  
   attribute {
     name = "createdAt"
     type = "S"  # Sort key type
