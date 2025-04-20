@@ -35,7 +35,7 @@ variable "lambda_function_name" {
 
 variable "lambda_subscriber_function_name" {
   description = "Name of the SNS Lambda function"
-  default     = "SnsSubscriberLambda"
+  default     = "SendEmailFromDynamoDBLambda"
 }
 
 variable "lambda_bucket_name" {
@@ -53,8 +53,5 @@ variable "lambda_subscriber_s3_key" {
   default     = "lambda/sns-processor.zip"
 }
 
-variable "lambda_subscriber_function_name" {
-  description = "Name of the SNS Lambda function"
-  default     = "SnsSubscriberLambda"
-}
+
 
