@@ -24,10 +24,15 @@ resource "aws_dynamodb_table" "csv_table" {
   name         = var.dynamodb_table_name
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "employeeId"
+  range_key    = "createdAt"  # <-- Sort key added
 
   attribute {
     name = "employeeId"
     type = "S"
+  }
+  attribute {
+    name = "createdAt"
+    type = "S"  # Sort key type
   }
 }
 
